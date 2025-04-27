@@ -1,13 +1,24 @@
 'use client';
 
-import { use } from 'react';
+import { use, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useIncidents } from '@/components/Context';
+
+
+function formatDate(dateStr: string) {
+  const date = new Date(dateStr);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
 
 export default function IncidentDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { incidents } = useIncidents();
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const incident = incidents.find((item) => item.id === Number(id));
 
@@ -73,7 +84,7 @@ export default function IncidentDetails({ params }: { params: Promise<{ id: stri
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div className="bg-gray-700 p-5 rounded-lg border-t-2 border-purple-400">
                 <h3 className="text-sm uppercase tracking-wider font-medium text-gray-400 mb-2">Reported Date</h3>
-                <p className="text-white font-medium text-lg">{incident.reported_at}</p>
+                <p className="text-white font-medium text-lg">{formatDate(incident.reported_at)}</p>
               </div>
               
               <div className="bg-gray-700 p-5 rounded-lg border-t-2 border-cyan-400">

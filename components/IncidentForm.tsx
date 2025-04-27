@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { useIncidents } from './Context';
 import { createPortal } from 'react-dom';
@@ -10,8 +10,13 @@ export default function IncidentForm() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [severity, setSeverity] = useState('Low');
+  const [mounted, setMounted] = useState(false);
 
   const { addIncident } = useIncidents();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,8 +52,7 @@ export default function IncidentForm() {
         Report Incident
       </button>
 
-      {/* Modal */}
-      {isOpen && createPortal(
+      {isOpen && mounted && createPortal(
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm z-50">
           <div className="bg-slate-200 text-black rounded-xl p-8 shadow-lg w-full max-w-sm transform transition-all duration-300 scale-100">
             <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">Report New Incident</h2>
@@ -107,7 +111,7 @@ export default function IncidentForm() {
             </form>
           </div>
         </div>,
-        document.body // PORTAL HERE
+        document.body
       )}
     </div>
   );

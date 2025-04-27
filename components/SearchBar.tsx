@@ -35,15 +35,14 @@ export default function SearchBar() {
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto relative z-[1000]">
-      {/* Search Input */}
+    <div className="w-full relative z-[1000]">
       <div className="relative">
         <input
           type="text"
           value={searchTerm}
           onChange={handleSearchChange}
           placeholder="Search incidents..."
-          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full p-2 pl-3 pr-10 border border-gray-700 bg-gray-800 text-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
         />
         {searchTerm && (
           <button
@@ -55,20 +54,19 @@ export default function SearchBar() {
         )}
       </div>
 
-      {/* Search Results Dropdown */}
       {searchTerm && (
-        <div className="absolute top-full mt-2 w-full bg-white rounded shadow-lg max-h-64 overflow-y-auto z-[1000] border border-gray-300">
+        <div className="absolute top-full mt-1 w-full bg-gray-800 rounded shadow-lg max-h-48 md:max-h-64 overflow-y-auto z-[1000] border border-gray-700">
           {filteredResults.length === 0 ? (
-            <p className="text-center text-gray-500 p-2">No incidents found.</p>
+            <p className="text-center text-gray-400 p-2 text-sm">No incidents found.</p>
           ) : (
             filteredResults.map((incident) => (
               <div
                 key={incident.id}
                 onClick={() => handleIncidentClick(incident.id)}
-                className="border-b border-gray-200 py-2 px-3 cursor-pointer hover:bg-gray-100 transition"
+                className="border-b border-gray-700 py-2 px-3 cursor-pointer hover:bg-gray-700 transition"
               >
-                <h3 className="text-md text-black font-semibold">{incident.title}</h3>
-                <p className="text-sm text-gray-600">{incident.description}</p>
+                <h3 className="text-sm md:text-md text-white font-semibold truncate">{incident.title}</h3>
+                <p className="text-xs md:text-sm text-gray-400 line-clamp-1">{incident.description}</p>
                 <p className={`text-xs font-bold ${getSeverityClass(incident.severity)}`}>
                   {incident.severity}
                 </p>

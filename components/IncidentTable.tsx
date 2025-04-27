@@ -1,10 +1,16 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pagination from './Pagination';
 import { useIncidents } from './Context';
 import Filters from './Filters'; 
 
 const ITEMS_PER_PAGE = 5;
+
+
+function formatDate(dateStr: string) {
+  const date = new Date(dateStr);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
 
 export default function IncidentTable() {
   const { incidents } = useIncidents();
@@ -14,6 +20,11 @@ export default function IncidentTable() {
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
   const [selectedSeverity, setSelectedSeverity] = useState('All');
   const [selectedSortOrder, setSelectedSortOrder] = useState('Newest');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const filteredData = selectedSeverity === 'All'
     ? [...data]
@@ -98,7 +109,7 @@ export default function IncidentTable() {
                   <td className={`p-4 font-semibold ${getSeverityTextColor(incident.severity)}`}>
                     {incident.severity}
                   </td>
-                  <td className="p-4 text-gray-800">{new Date(incident.reported_at).toLocaleDateString()}</td>
+                  <td className="p-4 text-gray-800">{formatDate(incident.reported_at)}</td>
                   <td className="p-4">
                     <button
                       onClick={() => toggleExpand(incident.id)}
